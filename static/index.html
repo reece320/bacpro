@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bacpro — BACnet Commissioning</title>
+<link rel="icon" href="favicon.svg">
+<link rel="stylesheet" href="styles.css?v=11">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-building" viewBox="0 0 24 24"><path d="M4 21V5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v16M15 21V9h4a1 1 0 0 1 1 1v11M3 21h18M7 8h4M7 12h4M7 16h4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 8-3 8h18s-3-1-3-8M13.7 21a2 2 0 0 1-3.4 0" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+  <symbol id="i-clipboard" viewBox="0 0 24 24"><path d="M9 4h6v3H9zM7 5H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1h-2M8 12h8M8 16h5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+  <symbol id="i-network" viewBox="0 0 24 24"><path d="M12 3v6M5 21v-5M19 21v-5M5 16h14M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM5 16a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM19 16a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 19h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-radar" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 12 19 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z" fill="currentColor"/></symbol>
+  <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1.5" fill="currentColor"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z" fill="currentColor"/></symbol>
+  <symbol id="i-cable" viewBox="0 0 24 24"><path d="M4 8h5v8H4zM15 8h5v8h-5zM9 12h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+</svg>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">b</span>
+    <span class="brand-text"><strong>bacpro</strong><em>BACnet Commissioning</em></span>
+  </div>
+  <div class="topbar-mid">
+    <span class="station-dot"></span>
+    <span id="stationName">Local station</span>
+    <span class="topbar-sep">/</span>
+    <span id="topbarPath" class="muted">No device selected</span>
+  </div>
+  <div class="topbar-right">
+    <span class="transport-badge" id="transportBadge">BACnet/IP</span>
+    <span class="clock" id="clock">--:--:--</span>
+    <span class="conn-pill" id="connPill"><i></i><span>Connecting</span></span>
+  </div>
+</header>
+
+<div class="alarm-banner" id="alarmBanner" hidden>
+  <svg class="ico"><use href="#i-bell"></use></svg>
+  <strong id="alarmBannerText">1 alarm active</strong>
+  <button class="link-btn" data-action="show-alarms">Review alarms</button>
+  <button class="icon-btn banner-close" data-action="dismiss-banner" title="Dismiss">
+    <svg class="ico"><use href="#i-close"></use></svg>
+  </button>
+</div>
+
+<div class="shell">
+  <nav class="rail">
+    <button class="rail-btn active" data-view="devices" title="Devices">
+      <svg class="ico"><use href="#i-building"></use></svg><span>Devices</span>
+    </button>
+    <button class="rail-btn" data-view="alarms" title="Alarms">
+      <svg class="ico"><use href="#i-bell"></use></svg><span>Alarms</span>
+      <b class="rail-badge" id="railAlarmCount" hidden>0</b>
+    </button>
+    <button class="rail-btn" data-view="commissioning" title="Commissioning">
+      <svg class="ico"><use href="#i-clipboard"></use></svg><span>Command</span>
+    </button>
+    <button class="rail-btn" data-view="modbus" title="Modbus master">
+      <svg class="ico"><use href="#i-bolt"></use></svg><span>Modbus</span>
+    </button>
+    <button class="rail-btn" data-view="network" title="Network">
+      <svg class="ico"><use href="#i-network"></use></svg><span>Network</span>
+    </button>
+    <div class="rail-spacer"></div>
+    <div class="rail-foot">v1.0</div>
+  </nav>
+
+  <aside class="sidebar">
+    <div class="panel-head">
+      <h2>Network discovery</h2>
+      <span class="count-chip" id="deviceCount">0</span>
+    </div>
+
+    <div class="segmented" id="transportTabs">
+      <button data-transport="ip" class="active">BACnet/IP</button>
+      <button data-transport="mstp">MS/TP · RS-485</button>
+    </div>
+
+    <div class="transport-panel" id="panelIp">
+      <label class="field">
+        <span>Directed targets <em>optional</em></span>
+        <input id="targetsInput" placeholder="192.168.1.10, 10.0.5.255:47808" autocomplete="off">
+      </label>
+      <div class="field-row">
+        <label class="field">
+          <span>Who-Is timeout</span>
+          <select id="timeoutSelect">
+            <option value="2">2 seconds</option>
+            <option value="3" selected>3 seconds</option>
+            <option value="5">5 seconds</option>
+            <option value="8">8 seconds</option>
+          </select>
+        </label>
+        <button class="btn primary" id="scanBtn">
+          <svg class="ico"><use href="#i-radar"></use></svg> Scan
+        </button>
+      </div>
+      <div class="demo-row">
+        <span class="demo-label"><i class="dot" id="simDot"></i> Demo network <em id="simDetail">3 devices</em></span>
+        <button class="btn tiny" id="simBtn">Start</button>
+      </div>
+    </div>
+
+    <div class="transport-panel" id="panelMstp" hidden>
+      <label class="field">
+        <span>Serial port</span>
+        <select id="serialPort"><option value="">Detecting…</option></select>
+      </label>
+      <div class="field-row">
+        <label class="field">
+          <span>Baud</span>
+          <select id="baudSelect">
+            <option>9600</option><option>19200</option>
+            <option selected>38400</option><option>76800</option><option>115200</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Our MAC</span>
+          <input id="macInput" type="number" min="0" max="127" value="1">
+        </label>
+      </div>
+      <label class="field">
+        <span>Max Master</span>
+        <input id="maxMasterInput" type="number" min="1" max="127" value="127">
+      </label>
+      <button class="btn primary block" id="mstpBtn">
+        <svg class="ico"><use href="#i-cable"></use></svg> Connect to bus
+      </button>
+      <div class="mstp-status" id="mstpStatus">
+        <span class="muted">Not connected</span>
+      </div>
+    </div>
+
+    <div class="panel-head devices-head">
+      <h2>Devices</h2>
+      <button class="icon-btn" id="refreshAll" title="Re-scan">
+        <svg class="ico"><use href="#i-refresh"></use></svg>
+      </button>
+    </div>
+    <div class="device-list" id="deviceList"></div>
+    <div class="sidebar-foot">
+      UDP 47808 · MS/TP RS-485<br>
+      Who-Is / I-Am / ReadProperty / WriteProperty<br>
+      <span class="muted">Independent tool inspired by ComfortPoint Online. Not affiliated with Honeywell.</span>
+    </div>
+  </aside>
+
+  <main class="main" id="main"></main>
+
+  <aside class="drawer" id="drawer" hidden></aside>
+</div>
+
+<footer class="statusbar">
+  <span id="statusTransport">Transport: BACnet/IP</span>
+  <span id="statusPort">UDP 47808</span>
+  <span id="statusDevices">0 devices</span>
+  <span id="statusPoll">Live polling 4 s</span>
+  <span class="grow"></span>
+  <span id="statusUpdated">Not scanned yet</span>
+</footer>
+
+<script src="app.js?v=16"></script>
+</body>
+</html>

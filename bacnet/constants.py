@@ -1,0 +1,136 @@
+"""BACnet enumerations used by the UI (object types, properties, units)."""
+
+OBJECT_TYPES = {
+    0: "Analog Input",
+    1: "Analog Output",
+    2: "Analog Value",
+    3: "Binary Input",
+    4: "Binary Output",
+    5: "Binary Value",
+    6: "Calendar",
+    7: "Command",
+    8: "Device",
+    9: "Event Enrollment",
+    10: "File",
+    11: "Group",
+    12: "Loop",
+    13: "Multi-state Input",
+    14: "Multi-state Output",
+    15: "Notification Class",
+    16: "Program",
+    17: "Schedule",
+    18: "Averaging",
+    19: "Multi-state Value",
+    20: "Trend Log",
+    21: "Life Safety Point",
+    22: "Life Safety Zone",
+    23: "Accumulator",
+    24: "Pulse Converter",
+    25: "Event Log",
+    26: "Global Group",
+    27: "Trend Log Multiple",
+    28: "Load Control",
+    29: "Structured View",
+    30: "Access Door",
+    31: "Timer",
+    32: "Access Credential",
+    33: "Access Point",
+    34: "Access Zone",
+    35: "Access User",
+    36: "Access Rights",
+    37: "Access Schedule",
+    38: "Web Service",
+    39: "Channel",
+    40: "Lighting Output",
+    41: "Binary Lighting Output",
+    42: "Network Port",
+    43: "Elevator Group",
+    44: "Escalator",
+    45: "Lift",
+    46: "Stage",
+    47: "Direction",
+}
+
+# Short labels for table badges
+OBJECT_SHORT = {
+    0: "AI", 1: "AO", 2: "AV", 3: "BI", 4: "BO", 5: "BV",
+    8: "DEV", 13: "MSI", 14: "MSO", 19: "MSV", 20: "TL",
+}
+
+PROPERTIES = {
+    "object-identifier": 75,
+    "object-name": 77,
+    "object-type": 79,
+    "present-value": 85,
+    "description": 28,
+    "units": 117,
+    "status-flags": 111,
+    "event-state": 36,
+    "reliability": 103,
+    "out-of-service": 81,
+    "cov-increment": 22,
+    "vendor-name": 121,
+    "vendor-identifier": 120,
+    "model-name": 70,
+    "firmware-revision": 44,
+    "application-software-version": 12,
+    "protocol-version": 98,
+    "protocol-revision": 139,
+    "system-status": 112,
+    "location": 58,
+    "object-list": 76,
+    "max-apdu-length-accepted": 62,
+    "segmentation-supported": 107,
+    "number-of-states": 74,
+    "state-text": 110,
+    "polarity": 84,
+    "relinquish-default": 104,
+    "priority-array": 87,
+    "database-revision": 155,
+}
+
+# Common engineering units (BACnet enumeration). Values not listed are shown
+# as "unit N" so nothing is invented.
+UNITS = {
+    0: "m²", 1: "ft²", 2: "mA", 3: "A", 4: "V", 5: "kV",
+    6: "VA", 7: "kVA", 8: "W", 9: "kW", 10: "MWh",
+    11: "kWh", 12: "BTU/h", 13: "ton",
+    20: "°C", 21: "°F", 22: "K",
+    25: "Pa", 26: "kPa", 27: "bar", 28: "psi", 29: "in. w.c.",
+    30: "m/s", 31: "ft/min", 32: "m³/s", 33: "ft³/min",
+    34: "m³/h", 35: "ft³/h", 36: "L/s", 37: "gpm",
+    38: "L/min", 39: "kg", 40: "lb", 41: "kg/s",
+    42: "lb/min", 43: "W/m²", 44: "BTU/h·ft²",
+    62: "°C", 63: "°F", 64: "K",
+    70: "ppm", 71: "ppb", 72: "% RH", 73: "%",
+    80: "hours", 81: "minutes", 82: "seconds",
+    83: "days", 84: "weeks", 85: "months", 86: "years",
+    89: "cfm", 90: "m³/min", 91: "L/s",
+    95: "%", 96: "ppm", 97: "ppb", 98: "% RH",
+    104: "°C", 105: "°F", 106: "K",
+    109: "in. w.c.", 110: "psi", 111: "bar",
+}
+
+# Only IDs that are widely documented; anything else renders as "Vendor N".
+VENDORS = {
+    0: "ASHRAE",
+    1: "NIST",
+    17: "Honeywell",
+}
+
+SYSTEM_STATUS = {
+    0: "Operational",
+    1: "Operational Read-Only",
+    2: "Download Required",
+    3: "Download In Progress",
+    4: "Non-Operational",
+    5: "Backup In Progress",
+    6: "Download Failed",
+}
+
+SEGMENTATION = {
+    0: "Segmented Both",
+    1: "Segmented Transmit",
+    2: "Segmented Receive",
+    3: "No Segmentation",
+}

@@ -1,0 +1,7 @@
+# bacpro runtime dependencies
+flask>=3.0,<4
+pyserial>=3.5,<4
+
+# build-time only
+pyinstaller>=6.0,<7
+pillow>=10.0
